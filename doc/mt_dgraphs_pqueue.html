@@ -1,0 +1,269 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module mt_dgraphs_pqueue</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module mt_dgraphs_pqueue</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Simple priority queue.
+<p>Copyright © 2024 Matthew Tolman</p>
+
+<p><b>Version:</b> 0.1.0</p>
+<p><b>Authors:</b> Matthew Tolman.</p>
+
+<h2><a name="description">Description</a></h2>Simple priority queue.
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-pqueue">pqueue()</a></h3>
+<p><code>pqueue() = [{any(), any()}] | []</code></p>
+
+
+<h3 class="typedecl"><a name="type-queue_entry">queue_entry()</a></h3>
+<p><code>queue_entry() = {any(), any()}</code></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#drop-1">drop/1</a></td><td>Returns the queue with the lowest priority item removed.</td></tr>
+<tr><td valign="top"><a href="#drop_r-1">drop_r/1</a></td><td>Returns the queue with the highest priority item removed.</td></tr>
+<tr><td valign="top"><a href="#filter-2">filter/2</a></td><td>  
+Filters items from the priority queue.</td></tr>
+<tr><td valign="top"><a href="#from_list-1">from_list/1</a></td><td>  
+Creates a priority queue from a list of either items or {Item, Priority} tuples.</td></tr>
+<tr><td valign="top"><a href="#get-1">get/1</a></td><td>Gets the lowest priority item from the queue or raises an error if the queue is empty.</td></tr>
+<tr><td valign="top"><a href="#get-2">get/2</a></td><td>Gets the lowest priority item from the queue or returns the default value if empty.</td></tr>
+<tr><td valign="top"><a href="#get_r-1">get_r/1</a></td><td>Gets the highest priority item from the queue or raises an error if the queue is empty.</td></tr>
+<tr><td valign="top"><a href="#get_r-2">get_r/2</a></td><td>Gets the highest priority item from the queue or default value if queue is empty.</td></tr>
+<tr><td valign="top"><a href="#in-2">in/2</a></td><td>Adds an item to a priority queue.</td></tr>
+<tr><td valign="top"><a href="#in_all-2">in_all/2</a></td><td>Adds all elements to the priority queue.</td></tr>
+<tr><td valign="top"><a href="#in_r-2">in_r/2</a></td><td>Equivalent to <a href="mt_dgraphs_pqueue.html#in-2"><code>mt_dgraphs_pqueue:in(Queue, Item)</code></a>.
+</td></tr>
+<tr><td valign="top"><a href="#is_empty-1">is_empty/1</a></td><td>Checks if a queue is empty.</td></tr>
+<tr><td valign="top"><a href="#is_pqueue-1">is_pqueue/1</a></td><td>Checks if a term is a valid priority queue.</td></tr>
+<tr><td valign="top"><a href="#is_queue-1">is_queue/1</a></td><td>Equivalent to <a href="mt_dgraphs_pqueue.html#is_pqueue-1"><code>mt_dgraphs_pqueue:is_pqueue(Queue)</code></a>.
+</td></tr>
+<tr><td valign="top"><a href="#join-2">join/2</a></td><td>Joins two priority queues together.</td></tr>
+<tr><td valign="top"><a href="#len-1">len/1</a></td><td>Returns the length of the priority queue.</td></tr>
+<tr><td valign="top"><a href="#member-2">member/2</a></td><td>  
+Checks if an item is part of the queue.</td></tr>
+<tr><td valign="top"><a href="#new-0">new/0</a></td><td>Creates a new priority queue.</td></tr>
+<tr><td valign="top"><a href="#out-1">out/1</a></td><td>
+  Removes the lowest priority item from the queue and returns the item removed.</td></tr>
+<tr><td valign="top"><a href="#out_r-1">out_r/1</a></td><td>
+  Removes the highest priority item from the queue and returns the item removed.</td></tr>
+<tr><td valign="top"><a href="#peek-1">peek/1</a></td><td>Peeks at the lowest priority item in the queue.</td></tr>
+<tr><td valign="top"><a href="#peek_r-1">peek_r/1</a></td><td>Peeks at the highest priority item in the queue.</td></tr>
+<tr><td valign="top"><a href="#reverse-1">reverse/1</a></td><td>Reverses a priority queue to be highest items first.</td></tr>
+<tr><td valign="top"><a href="#split-2">split/2</a></td><td>Splits a queue at the Nth position.</td></tr>
+<tr><td valign="top"><a href="#to_list-1">to_list/1</a></td><td>Converts a priority queue to a list of items.</td></tr>
+<tr><td valign="top"><a href="#to_reverse_list-1">to_reverse_list/1</a></td><td>Converts a priority queue to a list of items in reverse order.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="drop-1">drop/1</a></h3>
+<div class="spec">
+<p><code>drop(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; <a href="#type-pqueue">pqueue()</a></code><br></p>
+<p> </p>
+</div><p>Returns the queue with the lowest priority item removed.</p>
+
+<h3 class="function"><a name="drop_r-1">drop_r/1</a></h3>
+<div class="spec">
+<p><code>drop_r(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; <a href="#type-pqueue">pqueue()</a></code><br></p>
+<p> </p>
+</div><p>Returns the queue with the highest priority item removed.</p>
+
+<h3 class="function"><a name="filter-2">filter/2</a></h3>
+<div class="spec">
+<p><code>filter(FilterFun::fun(({any(), any()}) -&gt; boolean()), Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; <a href="#type-pqueue">pqueue()</a></code><br></p>
+<p><code>FilterFun</code>: Filter function.<br>
+<code>Queue</code>: Priority queue to filter.<br>
+</p>
+<p>returns: Filtered queue.</p>
+</div><p><p>  
+Filters items from the priority queue.</p>
+ 
+  The filter function recieves both the item and the priority in the tuple {Item, Priority}.</p>
+
+<h3 class="function"><a name="from_list-1">from_list/1</a></h3>
+<div class="spec">
+<p><code>from_list(Items::[<a href="#type-queue_entry">queue_entry()</a> | any()]) -&gt; <a href="#type-pqueue">pqueue()</a></code><br></p>
+<p> </p>
+<p>returns: A new queue.</p>
+</div><p><p>  
+Creates a priority queue from a list of either items or {Item, Priority} tuples. Items without a priority will get the default priority.</p>
+ 
+  Note: If you are wanting to push a 2 element tuple as an item, it will need to be in the form {{Your, Tuple}, Priorit]}</p>
+
+<h3 class="function"><a name="get-1">get/1</a></h3>
+<div class="spec">
+<p><code>get(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; any()</code><br></p><p><code>get(Queue::[]) -&gt; no_return()</code><br></p>
+<p> </p>
+<p> </p>
+</div><p>Gets the lowest priority item from the queue or raises an error if the queue is empty.</p>
+
+<h3 class="function"><a name="get-2">get/2</a></h3>
+<div class="spec">
+<p><code>get(Queue::<a href="#type-pqueue">pqueue()</a>, Default::any()) -&gt; any()</code><br></p>
+<p> </p>
+</div><p>Gets the lowest priority item from the queue or returns the default value if empty.</p>
+
+<h3 class="function"><a name="get_r-1">get_r/1</a></h3>
+<div class="spec">
+<p><code>get_r(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; any()</code><br></p>
+<p> </p>
+</div><p>Gets the highest priority item from the queue or raises an error if the queue is empty.</p>
+
+<h3 class="function"><a name="get_r-2">get_r/2</a></h3>
+<div class="spec">
+<p><code>get_r(Queue::<a href="#type-pqueue">pqueue()</a>, Default::any()) -&gt; any()</code><br></p>
+<p> </p>
+</div><p>Gets the highest priority item from the queue or default value if queue is empty.</p>
+
+<h3 class="function"><a name="in-2">in/2</a></h3>
+<div class="spec">
+<p><code>in(Queue::<a href="#type-pqueue">pqueue()</a>, Node::<a href="#type-queue_entry">queue_entry()</a> | any()) -&gt; <a href="#type-pqueue">pqueue()</a></code><br></p>
+<p> </p>
+</div><p>Adds an item to a priority queue. It can either be in the form {Item, Priority} or Item (with default priority)</p>
+
+<h3 class="function"><a name="in_all-2">in_all/2</a></h3>
+<div class="spec">
+<p><code>in_all(Queue::<a href="#type-pqueue">pqueue()</a>, List::[<a href="#type-queue_entry">queue_entry()</a> | any()]) -&gt; <a href="#type-pqueue">pqueue()</a></code><br></p>
+<p><code>Queue</code>: Priority queue to add to.<br>
+<code>List</code>: List of either {Item, Priority} or Item to add to the queue. If priority is omitted, then it will be given the default priority.<br>
+</p>
+<p>returns: Return.</p>
+</div><p>Adds all elements to the priority queue.</p>
+
+<h3 class="function"><a name="in_r-2">in_r/2</a></h3>
+<div class="spec">
+<p><code>in_r(Queue::<a href="#type-pqueue">pqueue()</a>, Item::<a href="#type-queue_entry">queue_entry()</a>) -&gt; <a href="#type-pqueue">pqueue()</a></code><br></p>
+<p> </p>
+</div><p>Equivalent to <a href="mt_dgraphs_pqueue.html#in-2"><code>mt_dgraphs_pqueue:in(Queue, Item)</code></a>.</p>
+
+
+<h3 class="function"><a name="is_empty-1">is_empty/1</a></h3>
+<div class="spec">
+<p><code>is_empty(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; boolean()</code><br></p>
+<p> </p>
+<p>returns: Returns true if empty, false otherwise.</p>
+</div><p>Checks if a queue is empty.</p>
+
+<h3 class="function"><a name="is_pqueue-1">is_pqueue/1</a></h3>
+<div class="spec">
+<p><code>is_pqueue(Queue::any()) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Checks if a term is a valid priority queue.</p>
+
+<h3 class="function"><a name="is_queue-1">is_queue/1</a></h3>
+<div class="spec">
+<p><code>is_queue(Queue::any()) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Equivalent to <a href="mt_dgraphs_pqueue.html#is_pqueue-1"><code>mt_dgraphs_pqueue:is_pqueue(Queue)</code></a>.</p>
+
+
+<h3 class="function"><a name="join-2">join/2</a></h3>
+<div class="spec">
+<p><code>join(Queue1::<a href="#type-pqueue">pqueue()</a>, Queue2::<a href="#type-pqueue">pqueue()</a>) -&gt; <a href="#type-pqueue">pqueue()</a></code><br></p>
+<p> </p>
+</div><p>Joins two priority queues together.</p>
+
+<h3 class="function"><a name="len-1">len/1</a></h3>
+<div class="spec">
+<p><code>len(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; integer()</code><br></p>
+<p> </p>
+</div><p>Returns the length of the priority queue.</p>
+
+<h3 class="function"><a name="member-2">member/2</a></h3>
+<div class="spec">
+<p><code>member(Queue::<a href="#type-pqueue">pqueue()</a>, Item::<a href="#type-queue_entry">queue_entry()</a> | any() | {any(), any}) -&gt; boolean()</code><br></p>
+<p><code>Queue</code>: Queue to search.<br>
+<code>Item</code>: Item to search for. Can be {Value, Priority} or Value.<br>
+</p>
+<p>returns: Return.</p>
+</div><p><p>  
+Checks if an item is part of the queue.</p>
+ 
+  <p>The item to search for may have a priority specified with it.</p>
+ 
+  If the priority is the atom 'any' then it will search to see if the value is present without checking the priority.
+  If a priority is specified, it will search for both a matching value and priority.
+  Otherwise, it will only check for a matching value.</p>
+
+<h3 class="function"><a name="new-0">new/0</a></h3>
+<div class="spec">
+<p><code>new() -&gt; <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs_pqueue.html#type-pqueue">mt_dgraphs_pqueue:pqueue()</a></code><br></p>
+<p> </p>
+</div><p>Creates a new priority queue. Lower priority values come first in the list.</p>
+
+<h3 class="function"><a name="out-1">out/1</a></h3>
+<div class="spec">
+<p><code>out(R::<a href="#type-pqueue">pqueue()</a>) -&gt; {empty, <a href="#type-pqueue">pqueue()</a>} | {{value, any()}, <a href="#type-pqueue">pqueue()</a>}</code><br></p>
+<p> </p>
+</div><p>
+  Removes the lowest priority item from the queue and returns the item removed.
+  When a value is returned, it will return the tuple {{value, Value}, NewQueue}.
+  When the queue is empty, it will return {empty, NewQueue}.</p>
+
+<h3 class="function"><a name="out_r-1">out_r/1</a></h3>
+<div class="spec">
+<p><code>out_r(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; {empty, <a href="#type-pqueue">pqueue()</a>} | {{value, any()}, <a href="#type-pqueue">pqueue()</a>}</code><br></p>
+<p> </p>
+</div><p>
+  Removes the highest priority item from the queue and returns the item removed.
+  When a value is returned, it will return the tuple {{value, Value}, NewQueue}.
+  When the queue is empty, it will return {empty, NewQueue}.</p>
+
+<h3 class="function"><a name="peek-1">peek/1</a></h3>
+<div class="spec">
+<p><code>peek(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; empty | {value, any()}</code><br></p>
+<p> </p>
+</div><p>Peeks at the lowest priority item in the queue.
+  If the queue has a value, it will return the tuple {value, Value}.
+  Otherwise, it will return the atom 'empty'.</p>
+
+<h3 class="function"><a name="peek_r-1">peek_r/1</a></h3>
+<div class="spec">
+<p><code>peek_r(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; empty | {value, any()}</code><br></p>
+<p> </p>
+</div><p>Peeks at the highest priority item in the queue.
+  If the queue has a value, it will return the tuple {value, Value}.
+  Otherwise, it will return the atom 'empty'.</p>
+
+<h3 class="function"><a name="reverse-1">reverse/1</a></h3>
+<div class="spec">
+<p><code>reverse(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; [<a href="#type-queue_entry">queue_entry()</a>]</code><br></p>
+<p> </p>
+</div><p>Reverses a priority queue to be highest items first.</p>
+
+<h3 class="function"><a name="split-2">split/2</a></h3>
+<div class="spec">
+<p><code>split(Queue::<a href="#type-pqueue">pqueue()</a>, N::integer()) -&gt; {<a href="#type-pqueue">pqueue()</a>, <a href="#type-pqueue">pqueue()</a>}</code><br></p>
+<p><code>Queue</code>: Queue to split.<br>
+<code>N</code>: Number of elements to keep in the first queue.<br>
+</p>
+</div><p>Splits a queue at the Nth position. Returns both halves in a tuple.</p>
+
+<h3 class="function"><a name="to_list-1">to_list/1</a></h3>
+<div class="spec">
+<p><code>to_list(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; [any()] | []</code><br></p>
+<p> </p>
+</div><p>Converts a priority queue to a list of items.
+  The resulting list will only be the items, no priorities will be included.</p>
+
+<h3 class="function"><a name="to_reverse_list-1">to_reverse_list/1</a></h3>
+<div class="spec">
+<p><code>to_reverse_list(Queue::<a href="#type-pqueue">pqueue()</a>) -&gt; [any()] | []</code><br></p>
+<p> </p>
+</div><p>Converts a priority queue to a list of items in reverse order.
+  The resulting list will only be the items, no priorities will be included.</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc</i></p>
+</body>
+</html>

@@ -588,7 +588,7 @@ add_edge(Graph, {Start, End, Opts}) ->
 
 %% ----------------------------------
 %%
-%% @doc Gets the edges for a function.
+%% @doc Gets the edges for a graph.
 %% @end
 %% @returns Return.
 %% @end

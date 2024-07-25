@@ -1,0 +1,714 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module mt_dgraphs</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module mt_dgraphs</h1>
+<ul class="index"><li><a href="#description">Description</a></li><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>Mathematical graph library for representing nodes and connections.
+<p>Copyright © 2024 Matthew Tolman</p>
+
+<p><b>Version:</b> 0.0.1</p>
+<p><b>Authors:</b> Matthew Tolman.</p>
+
+<h2><a name="description">Description</a></h2>Mathematical graph library for representing nodes and connections. Has graph traversals, graph modifications, and graph querying methods.
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-edge_option">edge_option()</a></h3>
+<p><code>edge_option() = {weight, <a href="#type-edge_weight">edge_weight()</a>} | {label, any()}</code></p>
+
+
+<h3 class="typedecl"><a name="type-edge_options">edge_options()</a></h3>
+<p><code>edge_options() = [<a href="#type-edge_option">edge_option()</a>]</code></p>
+
+
+<h3 class="typedecl"><a name="type-edge_weight">edge_weight()</a></h3>
+<p><code>edge_weight() = integer() | float()</code></p>
+
+
+<h3 class="typedecl"><a name="type-graph">graph()</a></h3>
+<p><code>graph() = #mt_dgraphs{}</code></p>
+
+
+<h3 class="typedecl"><a name="type-graph_edge">graph_edge()</a></h3>
+<p><code>graph_edge() = #mt_dgraphs_edge{}</code></p>
+
+
+<h3 class="typedecl"><a name="type-graph_edges">graph_edges()</a></h3>
+<p><code>graph_edges() = [<a href="#type-graph_edge">graph_edge()</a>] | []</code></p>
+
+
+<h3 class="typedecl"><a name="type-graph_node">graph_node()</a></h3>
+<p><code>graph_node() = #mt_dgraphs_node{}</code></p>
+
+
+<h3 class="typedecl"><a name="type-graph_nodes">graph_nodes()</a></h3>
+<p><code>graph_nodes() = [<a href="#type-graph_node">graph_node()</a>] | []</code></p>
+
+
+<h3 class="typedecl"><a name="type-graph_type">graph_type()</a></h3>
+<p><code>graph_type() = directed | undirected</code></p>
+
+
+<h3 class="typedecl"><a name="type-input_edge">input_edge()</a></h3>
+<p><code>input_edge() = {atom(), atom()} | {atom(), atom(), <a href="#type-edge_options">edge_options()</a>}</code></p>
+
+
+<h3 class="typedecl"><a name="type-input_edges">input_edges()</a></h3>
+<p><code>input_edges() = [<a href="#type-input_edge">input_edge()</a>]</code></p>
+
+
+<h3 class="typedecl"><a name="type-input_node">input_node()</a></h3>
+<p><code>input_node() = atom() | {atom(), <a href="#type-node_options">node_options()</a>}</code></p>
+
+
+<h3 class="typedecl"><a name="type-input_nodes">input_nodes()</a></h3>
+<p><code>input_nodes() = [<a href="#type-input_node">input_node()</a>]</code></p>
+
+
+<h3 class="typedecl"><a name="type-input_type">input_type()</a></h3>
+<p><code>input_type() = <a href="#type-graph_type">graph_type()</a></code></p>
+
+
+<h3 class="typedecl"><a name="type-node_option">node_option()</a></h3>
+<p><code>node_option() = {label, any()}</code></p>
+
+
+<h3 class="typedecl"><a name="type-node_options">node_options()</a></h3>
+<p><code>node_options() = [<a href="#type-node_option">node_option()</a>]</code></p>
+
+
+<h3 class="typedecl"><a name="type-subgraph_opts">subgraph_opts()</a></h3>
+<p><code>subgraph_opts() = [{strict, boolean()}]</code></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#add_edge-3">add_edge/3</a></td><td>Adds an edge to a graph only if it does not yet exist.</td></tr>
+<tr><td valign="top"><a href="#add_edge-4">add_edge/4</a></td><td>Adds an edge to a graph only if it does not yet exist.</td></tr>
+<tr><td valign="top"><a href="#add_edges-2">add_edges/2</a></td><td>
+  Adds multiple edges in a graph.</td></tr>
+<tr><td valign="top"><a href="#add_node-2">add_node/2</a></td><td>Adds a node to the graph if it doesn't already exist.</td></tr>
+<tr><td valign="top"><a href="#add_node-3">add_node/3</a></td><td>Adds a node to the graph if it doesn't already exist.</td></tr>
+<tr><td valign="top"><a href="#add_nodes-2">add_nodes/2</a></td><td>Adds nodes to a graph.</td></tr>
+<tr><td valign="top"><a href="#bfs_path_to-3">bfs_path_to/3</a></td><td>Retrieves the path with the fewest connections between to nodes.</td></tr>
+<tr><td valign="top"><a href="#delete_edge-3">delete_edge/3</a></td><td>Deletes an edge in a graph.</td></tr>
+<tr><td valign="top"><a href="#delete_edges-2">delete_edges/2</a></td><td>Deletes multiple edges from a graph edges that don't exist are ignored.</td></tr>
+<tr><td valign="top"><a href="#delete_node-2">delete_node/2</a></td><td>Deletes a node from the graph.</td></tr>
+<tr><td valign="top"><a href="#delete_nodes-2">delete_nodes/2</a></td><td>Deletes multiple nodes from the graph.</td></tr>
+<tr><td valign="top"><a href="#edge_by-3">edge_by/3</a></td><td>Gets an edge by start and end node ids.</td></tr>
+<tr><td valign="top"><a href="#edge_end-1">edge_end/1</a></td><td>Gets the ending node ID for an edge.</td></tr>
+<tr><td valign="top"><a href="#edge_exists-3">edge_exists/3</a></td><td>Checks if an edge exists.</td></tr>
+<tr><td valign="top"><a href="#edge_label-1">edge_label/1</a></td><td>Gets the label for an edge.</td></tr>
+<tr><td valign="top"><a href="#edge_start-1">edge_start/1</a></td><td>Get starting node ID for an edge.</td></tr>
+<tr><td valign="top"><a href="#edge_weight-1">edge_weight/1</a></td><td>Gets the weight for an edge.</td></tr>
+<tr><td valign="top"><a href="#edges-1">edges/1</a></td><td>Gets the edges for a graph.</td></tr>
+<tr><td valign="top"><a href="#edges_from-2">edges_from/2</a></td><td>Gets the edges coming from a node.</td></tr>
+<tr><td valign="top"><a href="#edges_to-2">edges_to/2</a></td><td>Gets the edges going to a node.</td></tr>
+<tr><td valign="top"><a href="#get_edge_label-3">get_edge_label/3</a></td><td>Gets the label for an edge.</td></tr>
+<tr><td valign="top"><a href="#get_edge_weight-3">get_edge_weight/3</a></td><td>Gets the weight for an edge.</td></tr>
+<tr><td valign="top"><a href="#get_node_label-2">get_node_label/2</a></td><td>Gets the label tied to a node.</td></tr>
+<tr><td valign="top"><a href="#in_degree-2">in_degree/2</a></td><td>Gets the number of edges coming into a node.</td></tr>
+<tr><td valign="top"><a href="#info-1">info/1</a></td><td>Returns a map describing the fields in a graph.</td></tr>
+<tr><td valign="top"><a href="#is_acyclic-1">is_acyclic/1</a></td><td>Checks whether a graph is acyclic.</td></tr>
+<tr><td valign="top"><a href="#is_cyclic-1">is_cyclic/1</a></td><td>Checks whether a graph is cyclic.</td></tr>
+<tr><td valign="top"><a href="#is_dag-1">is_dag/1</a></td><td>Checks whether a graph is a directed acyclic graph.</td></tr>
+<tr><td valign="top"><a href="#is_empty-1">is_empty/1</a></td><td>Checks whether a graph is empty.</td></tr>
+<tr><td valign="top"><a href="#is_subgraph-2">is_subgraph/2</a></td><td>Checks whether a graph is a subgraph of another graph.</td></tr>
+<tr><td valign="top"><a href="#is_subgraph-3">is_subgraph/3</a></td><td>Checks whether a graph is a subgraph of another graph.</td></tr>
+<tr><td valign="top"><a href="#is_tree-1">is_tree/1</a></td><td>Checks whether a graph is a tree.</td></tr>
+<tr><td valign="top"><a href="#new-0">new/0</a></td><td>Creates a new graph.</td></tr>
+<tr><td valign="top"><a href="#new-1">new/1</a></td><td>Creates a new graph.</td></tr>
+<tr><td valign="top"><a href="#new-2">new/2</a></td><td>Creates a new graph.</td></tr>
+<tr><td valign="top"><a href="#new-3">new/3</a></td><td>Creates a new graph.</td></tr>
+<tr><td valign="top"><a href="#node_by_id-2">node_by_id/2</a></td><td>Gets a node by ID.</td></tr>
+<tr><td valign="top"><a href="#node_exists-2">node_exists/2</a></td><td>Checks if a node exists.</td></tr>
+<tr><td valign="top"><a href="#node_id-1">node_id/1</a></td><td>Gets the ID for a node.</td></tr>
+<tr><td valign="top"><a href="#node_ids-1">node_ids/1</a></td><td>Gets list of all node ids.</td></tr>
+<tr><td valign="top"><a href="#node_label-1">node_label/1</a></td><td>Gets the label for a node.</td></tr>
+<tr><td valign="top"><a href="#nodes-1">nodes/1</a></td><td>Gets nodes for a graph.</td></tr>
+<tr><td valign="top"><a href="#num_edges-1">num_edges/1</a></td><td>Returns the number of edges in a graph.</td></tr>
+<tr><td valign="top"><a href="#num_nodes-1">num_nodes/1</a></td><td>Retuns the number of nodes in a graph.</td></tr>
+<tr><td valign="top"><a href="#out_degree-2">out_degree/2</a></td><td>Gets the number of edges leaving a node.</td></tr>
+<tr><td valign="top"><a href="#path_exists-3">path_exists/3</a></td><td>Checks if a path exists between two nodes.</td></tr>
+<tr><td valign="top"><a href="#path_to-3">path_to/3</a></td><td>Retrieves the lowest weighted path between to nodes.</td></tr>
+<tr><td valign="top"><a href="#paths-3">paths/3</a></td><td>Retrieves a list of all non-looping paths between two nodes.</td></tr>
+<tr><td valign="top"><a href="#roots-1">roots/1</a></td><td>Gets a list of node ids for nodes that are roots (in degree of 0).</td></tr>
+<tr><td valign="top"><a href="#set_edge-3">set_edge/3</a></td><td>Set an edge's data to the default label and weight.</td></tr>
+<tr><td valign="top"><a href="#set_edge-4">set_edge/4</a></td><td>Set an edge's data to the given label and/or weight.</td></tr>
+<tr><td valign="top"><a href="#set_edge_label-3">set_edge_label/3</a></td><td>Sets the label for an edge in the graph.</td></tr>
+<tr><td valign="top"><a href="#set_edge_weight-3">set_edge_weight/3</a></td><td>Sets the weight for an edge in the graph.</td></tr>
+<tr><td valign="top"><a href="#set_edges-2">set_edges/2</a></td><td>Sets multiple edges in a graph.</td></tr>
+<tr><td valign="top"><a href="#set_node-2">set_node/2</a></td><td>Sets node data in a graph with a default label.</td></tr>
+<tr><td valign="top"><a href="#set_node-3">set_node/3</a></td><td>Sets node data in a graph with the provided options.</td></tr>
+<tr><td valign="top"><a href="#set_node_label-3">set_node_label/3</a></td><td>Sets the label for a node in the graph.</td></tr>
+<tr><td valign="top"><a href="#set_nodes-2">set_nodes/2</a></td><td>Sets node data for a list of nodes.</td></tr>
+<tr><td valign="top"><a href="#split_edge-4">split_edge/4</a></td><td>Splits an edge with either an existing or new node.</td></tr>
+<tr><td valign="top"><a href="#topsort-1">topsort/1</a></td><td>Performs a topological sort on a graph.</td></tr>
+<tr><td valign="top"><a href="#transpose-1">transpose/1</a></td><td>Reverses the direction of all edges in a graph.</td></tr>
+<tr><td valign="top"><a href="#type-1">type/1</a></td><td>Get the graph type.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="add_edge-3">add_edge/3</a></h3>
+<div class="spec">
+<p><code>add_edge(Graph::<a href="#type-graph">graph()</a>, Start::atom(), End::atom()) -&gt; {ok, <a href="#type-graph">graph()</a>} | {already_exists, <a href="#type-graph">graph()</a>}</code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Start</code>: Node ID for the edge start.<br>
+<code>End</code>: Node ID for the edge end.<br>
+</p>
+<p>returns: {ok, Graph} if a node was added, {already_exists, Graph} if a node was not added.</p>
+</div><p>Adds an edge to a graph only if it does not yet exist.</p>
+
+<h3 class="function"><a name="add_edge-4">add_edge/4</a></h3>
+<div class="spec">
+<p><code>add_edge(Graph::<a href="#type-graph">graph()</a>, Start::atom(), End::atom(), Opts::<a href="#type-edge_options">edge_options()</a>) -&gt; {ok, <a href="#type-graph">graph()</a>} | {already_exists, <a href="#type-graph">graph()</a>}</code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Start</code>: Node ID for the edge start.<br>
+<code>End</code>: Node ID for the edge end.<br>
+<code>Opts</code>: A list of options for the edge. Possible options: {label, Label}, {weight: Weight}.<br>
+</p>
+<p>returns: {ok, Graph} if a node was added, {already_exists, Graph} if a node was not added.</p>
+</div><p>Adds an edge to a graph only if it does not yet exist.</p>
+
+<h3 class="function"><a name="add_edges-2">add_edges/2</a></h3>
+<div class="spec">
+<p><code>add_edges(Graph::<a href="#type-graph">graph()</a>, Edges::<a href="#type-input_edges">input_edges()</a>) -&gt; {integer(), <a href="#type-graph">graph()</a>}</code><br></p>
+<p><code>Graph</code>: Graph to edit.<br>
+<code>Edges</code>: List of edges to add to the node. Format is either {Start :: atom(), End :: atom()} or {Start :: atom(), End :: atom(), Opts :: edge_options()}.<br>
+</p>
+<p>returns: Number of inserted edges and the updated graph.</p>
+</div><p>
+  Adds multiple edges in a graph. Will ignore existing edges and add non-existing edges.</p>
+
+<h3 class="function"><a name="add_node-2">add_node/2</a></h3>
+<div class="spec">
+<p><code>add_node(Graph::<a href="#type-graph">graph()</a>, NodeId::atom()) -&gt; {ok, <a href="#type-graph">graph()</a>} | {already_exists, <a href="#type-graph">graph()</a>}</code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>NodeId</code>: ID of node to add.<br>
+</p>
+<p>returns: {ok, Graph} if node was added, {already_exists, Graph} if node was not added.</p>
+</div><p>Adds a node to the graph if it doesn't already exist.</p>
+
+<h3 class="function"><a name="add_node-3">add_node/3</a></h3>
+<div class="spec">
+<p><code>add_node(Graph::<a href="#type-graph">graph()</a>, NodeId::atom(), Opts::<a href="#type-node_options">node_options()</a>) -&gt; {ok, <a href="#type-graph">graph()</a>} | {already_exists, <a href="#type-graph">graph()</a>}</code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>NodeId</code>: ID of node to add.<br>
+<code>Opts</code>: List of node options. Possible options: {label, Label}.<br>
+</p>
+<p>returns: {ok, Graph} if node was added, {already_exists, Graph} if node was not added.</p>
+</div><p>Adds a node to the graph if it doesn't already exist.</p>
+
+<h3 class="function"><a name="add_nodes-2">add_nodes/2</a></h3>
+<div class="spec">
+<p><code>add_nodes(Graph::<a href="#type-graph">graph()</a>, Nodes::<a href="#type-input_nodes">input_nodes()</a>) -&gt; {integer(), <a href="#type-graph">graph()</a>}</code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Nodes</code>: List of nodes to add. Elements are of either NodeId :: atom() or {NodeId :: atom(), Options :: node_options()}.<br>
+</p>
+<p>returns: The number of inserted nodes and the updated graph.</p>
+</div><p>Adds nodes to a graph. Will ignore any nodes that already existed.</p>
+
+<h3 class="function"><a name="bfs_path_to-3">bfs_path_to/3</a></h3>
+<div class="spec">
+<p><code>bfs_path_to(Graph::<a href="#type-graph">graph()</a>, From::atom(), To::atom()) -&gt; {ok, [atom()]} | {error, not_found | none}</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+</p>
+<p>returns: {ok, Path} if a path is found, {error, none} if there is no path, or {error, not_found} if the start or end is invalid.</p>
+</div><p>Retrieves the path with the fewest connections between to nodes.</p>
+
+<h3 class="function"><a name="delete_edge-3">delete_edge/3</a></h3>
+<div class="spec">
+<p><code>delete_edge(Graph::<a href="#type-graph">graph()</a>, Start::atom(), End::atom()) -&gt; {boolean(), <a href="#type-graph">graph()</a>}</code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Start</code>: Starting node ID.<br>
+<code>End</code>: Ending node ID.<br>
+</p>
+<p>returns: The final graph.</p>
+</div><p>Deletes an edge in a graph. If the edge is not present then it will return the graph.</p>
+
+<h3 class="function"><a name="delete_edges-2">delete_edges/2</a></h3>
+<div class="spec">
+<p><code>delete_edges(Graph::<a href="#type-graph">graph()</a>, Edges::[{atom(), atom()}]) -&gt; {integer(), <a href="#type-graph">graph()</a>}</code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Edges</code>: List of edges to remove.<br>
+</p>
+<p>returns: The final graph.</p>
+</div><p>Deletes multiple edges from a graph edges that don't exist are ignored.</p>
+
+<h3 class="function"><a name="delete_node-2">delete_node/2</a></h3>
+<div class="spec">
+<p><code>delete_node(Graph::<a href="#type-graph">graph()</a>, NodeId::atom()) -&gt; {boolean(), <a href="#type-graph">graph()</a>}</code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>NodeId</code>: ID of node to delete.<br>
+</p>
+<p>returns: The final graph.</p>
+</div><p><p>Deletes a node from the graph. Does nothing if the node doesn't exist. Deletes all edges tied to the node.</p>
+ 
+  Returns whether a node was deleted or not.</p>
+
+<h3 class="function"><a name="delete_nodes-2">delete_nodes/2</a></h3>
+<div class="spec">
+<p><code>delete_nodes(Graph::<a href="#type-graph">graph()</a>, Nodes::[atom()]) -&gt; {integer(), <a href="#type-graph">graph()</a>}</code><br></p>
+<p><code>Graph</code>: The graph to operate on.<br>
+<code>Nodes</code>: The list of nodes to delete.<br>
+</p>
+<p>returns: The deletion count and the final graph.</p>
+</div><p>Deletes multiple nodes from the graph.
+  Returns how many were deleted.</p>
+
+<h3 class="function"><a name="edge_by-3">edge_by/3</a></h3>
+<div class="spec">
+<p><code>edge_by(Graph::<a href="#type-graph">graph()</a>, Start::atom(), End::atom()) -&gt; {ok, <a href="#type-graph_edge">graph_edge()</a>} | {error, not_found}</code><br></p>
+<p><code>Graph</code>: The graph to search.<br>
+<code>Start</code>: The ID of the starting node.<br>
+<code>End</code>: The ID of the ending node.<br>
+</p>
+<p>returns: {ok, EdgeRecord} if found, {error, not_found} if the node doesn't exist.</p>
+</div><p>Gets an edge by start and end node ids.</p>
+
+<h3 class="function"><a name="edge_end-1">edge_end/1</a></h3>
+<div class="spec">
+<p><code>edge_end(Edge::<a href="#type-graph_edge">graph_edge()</a>) -&gt; atom()</code><br></p>
+<p><code>Edge</code>: Edge to operate on.<br>
+</p>
+<p>returns: Node ID.</p>
+</div><p>Gets the ending node ID for an edge.</p>
+
+<h3 class="function"><a name="edge_exists-3">edge_exists/3</a></h3>
+<div class="spec">
+<p><code>edge_exists(Graph::<a href="#type-graph">graph()</a>, Start::atom(), End::atom()) -&gt; boolean()</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+<code>Start</code>: Starting node ID.<br>
+<code>End</code>: Ending node ID.<br>
+</p>
+<p>returns: A boolean indicating if the edge exists.</p>
+</div><p>Checks if an edge exists.</p>
+
+<h3 class="function"><a name="edge_label-1">edge_label/1</a></h3>
+<div class="spec">
+<p><code>edge_label(Edge::<a href="#type-graph_edge">graph_edge()</a>) -&gt; any()</code><br></p>
+<p><code>Edge</code>: Graph edge to operate on.<br>
+</p>
+<p>returns: Edge label.</p>
+</div><p>Gets the label for an edge.</p>
+
+<h3 class="function"><a name="edge_start-1">edge_start/1</a></h3>
+<div class="spec">
+<p><code>edge_start(Edge::<a href="#type-graph_edge">graph_edge()</a>) -&gt; atom()</code><br></p>
+<p><code>Edge</code>: Edge to operate on.<br>
+</p>
+<p>returns: Node ID.</p>
+</div><p>Get starting node ID for an edge.</p>
+
+<h3 class="function"><a name="edge_weight-1">edge_weight/1</a></h3>
+<div class="spec">
+<p><code>edge_weight(Edge::<a href="#type-graph_edge">graph_edge()</a>) -&gt; <a href="#type-edge_weight">edge_weight()</a></code><br></p>
+<p><code>Edge</code>: Graph edge to operate on.<br>
+</p>
+<p>returns: Edge weight.</p>
+</div><p>Gets the weight for an edge.</p>
+
+<h3 class="function"><a name="edges-1">edges/1</a></h3>
+<div class="spec">
+<p><code>edges(Graph::<a href="#type-graph">graph()</a>) -&gt; <a href="#type-graph_edges">graph_edges()</a></code><br></p>
+<p> </p>
+<p>returns: Return.</p>
+</div><p>Gets the edges for a graph.</p>
+
+<h3 class="function"><a name="edges_from-2">edges_from/2</a></h3>
+<div class="spec">
+<p><code>edges_from(Graph::<a href="#type-graph">graph()</a>, NodeId::atom()) -&gt; {ok, <a href="#type-graph_edges">graph_edges()</a>} | {error, not_found}</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+<code>NodeId</code>: ID of node to query.<br>
+</p>
+<p>returns: {ok, Edges} if node exists or {error, not_found} if it doesn't exist.</p>
+</div><p>Gets the edges coming from a node.</p>
+
+<h3 class="function"><a name="edges_to-2">edges_to/2</a></h3>
+<div class="spec">
+<p><code>edges_to(Graph::<a href="#type-graph">graph()</a>, NodeId::atom()) -&gt; {ok, <a href="#type-graph_edges">graph_edges()</a>} | {error, not_found}</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+<code>NodeId</code>: ID of node to query.<br>
+</p>
+<p>returns: {ok, Edges} if node exists or {error, not_found} if it doesn't exist.</p>
+</div><p>Gets the edges going to a node.</p>
+
+<h3 class="function"><a name="get_edge_label-3">get_edge_label/3</a></h3>
+<div class="spec">
+<p><code>get_edge_label(Graph::<a href="#type-graph">graph()</a>, Start::atom(), End::atom()) -&gt; {ok, any()} | {error, not_found}</code><br></p>
+<p><code>Graph</code>: Graph to Query.<br>
+<code>Start</code>: Starting node id for the edge.<br>
+<code>End</code>: Ending node id for the edge.<br>
+</p>
+<p>returns: {ok, Label} if the edge exists or {error, not_found} if it doesn't exist.</p>
+</div><p>Gets the label for an edge.</p>
+
+<h3 class="function"><a name="get_edge_weight-3">get_edge_weight/3</a></h3>
+<div class="spec">
+<p><code>get_edge_weight(Graph::<a href="#type-graph">graph()</a>, Start::atom(), End::atom()) -&gt; {ok, <a href="#type-edge_weight">edge_weight()</a>} | {error, not_found}</code><br></p>
+<p><code>Graph</code>: Graph to Query.<br>
+<code>Start</code>: Starting node id for the edge.<br>
+<code>End</code>: Ending node id for the edge.<br>
+</p>
+<p>returns: {ok, Weight} if the edge exists or  {error, not_found} if it doesn't exist.</p>
+</div><p>Gets the weight for an edge.</p>
+
+<h3 class="function"><a name="get_node_label-2">get_node_label/2</a></h3>
+<div class="spec">
+<p><code>get_node_label(Graph::<a href="#type-graph">graph()</a>, NodeId::atom()) -&gt; {ok, any()} | {error, not_found}</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+<code>NodeId</code>: ID of node to get label for.<br>
+</p>
+<p>returns: {ok, Label} if node exists or {error, not_found} if it doesn't exist.</p>
+</div><p>Gets the label tied to a node.</p>
+
+<h3 class="function"><a name="in_degree-2">in_degree/2</a></h3>
+<div class="spec">
+<p><code>in_degree(Graph::<a href="#type-graph">graph()</a>, NodeId::atom()) -&gt; {ok, integer()} | {error, not_found}</code><br></p>
+<p><code>Graph</code>: The graph to query.<br>
+<code>NodeId</code>: The ID of the node coming in.<br>
+</p>
+<p>returns: {ok, EdgeCount} if node exists, {error, not_found} if it doesn't.</p>
+</div><p>Gets the number of edges coming into a node.</p>
+
+<h3 class="function"><a name="info-1">info/1</a></h3>
+<div class="spec">
+<p><code>info(Graph::<a href="#type-graph">graph()</a>) -&gt; map()</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+</p>
+<p>returns: A map.</p>
+</div><p>Returns a map describing the fields in a graph.</p>
+
+<h3 class="function"><a name="is_acyclic-1">is_acyclic/1</a></h3>
+<div class="spec">
+<p><code>is_acyclic(Graph::<a href="#type-graph">graph()</a>) -&gt; boolean()</code><br></p>
+<p><code>Graph</code>: Graph to check.<br>
+</p>
+<p>returns: true if acyclic, false otherwise.</p>
+</div><p>Checks whether a graph is acyclic.</p>
+
+<h3 class="function"><a name="is_cyclic-1">is_cyclic/1</a></h3>
+<div class="spec">
+<p><code>is_cyclic(Graph::<a href="#type-graph">graph()</a>) -&gt; boolean()</code><br></p>
+<p><code>Graph</code>: Graph to check.<br>
+</p>
+<p>returns: true if so, false otherwise.</p>
+</div><p>Checks whether a graph is cyclic.</p>
+
+<h3 class="function"><a name="is_dag-1">is_dag/1</a></h3>
+<div class="spec">
+<p><code>is_dag(Graph::<a href="#type-graph">graph()</a>) -&gt; boolean()</code><br></p>
+<p><code>Graph</code>: Graph to check.<br>
+</p>
+<p>returns: true if so, false otherwise.</p>
+</div><p>Checks whether a graph is a directed acyclic graph.</p>
+
+<h3 class="function"><a name="is_empty-1">is_empty/1</a></h3>
+<div class="spec">
+<p><code>is_empty(Graph::<a href="#type-graph">graph()</a>) -&gt; boolean()</code><br></p>
+<p><code>Graph</code>: Graph to check.<br>
+</p>
+<p>returns: true if so, false otherwise.</p>
+</div><p>Checks whether a graph is empty.</p>
+
+<h3 class="function"><a name="is_subgraph-2">is_subgraph/2</a></h3>
+<div class="spec">
+<p><code>is_subgraph(RootGraph::<a href="#type-graph">graph()</a>, SubGraph::<a href="#type-graph">graph()</a>) -&gt; boolean()</code><br></p>
+<p><code>RootGraph</code>: Main graph for check.<br>
+<code>SubGraph</code>: Subgraph to check if part of root graph.<br>
+</p>
+<p>returns: true if so, false otherwise.</p>
+</div><p>Checks whether a graph is a subgraph of another graph.</p>
+
+<h3 class="function"><a name="is_subgraph-3">is_subgraph/3</a></h3>
+<div class="spec">
+<p><code>is_subgraph(RootGraph::<a href="#type-graph">graph()</a>, SubGraph::<a href="#type-graph">graph()</a>, Opts::<a href="#type-subgraph_opts">subgraph_opts()</a>) -&gt; boolean()</code><br></p>
+<p><code>RootGraph</code>: Main graph for check.<br>
+<code>SubGraph</code>: Subgraph to check if part of root graph.<br>
+<code>Opts</code>: A list of check options. Valid options are: {strict, boolean()}.<br>
+</p>
+<p>returns: true if so, false otherwise.</p>
+</div><p>Checks whether a graph is a subgraph of another graph. Strict checks means all attributes of nodes must match. Non-strict checks mean only the ids must match.</p>
+
+<h3 class="function"><a name="is_tree-1">is_tree/1</a></h3>
+<div class="spec">
+<p><code>is_tree(Graph::<a href="#type-graph">graph()</a>) -&gt; boolean()</code><br></p>
+<p><code>Graph</code>: Graph to check.<br>
+</p>
+<p>returns: true if so, false otherwise.</p>
+</div><p>Checks whether a graph is a tree.</p>
+
+<h3 class="function"><a name="new-0">new/0</a></h3>
+<div class="spec">
+<p><code>new() -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p> </p>
+<p>returns: A graph.</p>
+</div><p>Creates a new graph.</p>
+
+<h3 class="function"><a name="new-1">new/1</a></h3>
+<div class="spec">
+<p><code>new(Type_Or_Edges::<a href="#type-graph_type">graph_type()</a> | <a href="#type-input_edges">input_edges()</a>) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Type_Or_Edges</code>: Type of graph (directed or undirected) or a list of graph edges.<br>
+</p>
+<p>returns: A graph.</p>
+</div><p>Creates a new graph.</p>
+
+<h3 class="function"><a name="new-2">new/2</a></h3>
+<div class="spec">
+<p><code>new(Type_Or_Nodes::<a href="#type-graph_type">graph_type()</a> | <a href="#type-input_nodes">input_nodes()</a>, Edges::<a href="#type-input_edges">input_edges()</a>) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Type_Or_Nodes</code>: Type of graph (directed or undirected) or a list of graph nodes.<br>
+<code>Edges</code>: A list of graph edges.<br>
+</p>
+<p>returns: A graph.</p>
+</div><p>Creates a new graph.</p>
+
+<h3 class="function"><a name="new-3">new/3</a></h3>
+<div class="spec">
+<p><code>new(Type::<a href="#type-graph_type">graph_type()</a>, Nodes::<a href="#type-input_nodes">input_nodes()</a>, Edges::<a href="#type-input_edges">input_edges()</a>) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Type</code>: The type of graph (directed or undirected).<br>
+<code>Nodes</code>: The nodes of the graph.<br>
+<code>Edges</code>: The edges of the graph.<br>
+</p>
+<p>returns: A graph.</p>
+</div><p>Creates a new graph.</p>
+
+<h3 class="function"><a name="node_by_id-2">node_by_id/2</a></h3>
+<div class="spec">
+<p><code>node_by_id(Graph::<a href="#type-graph">graph()</a>, NodeId::atom()) -&gt; {ok, <a href="#type-graph_node">graph_node()</a>} | {error, not_found}</code><br></p>
+<p><code>Graph</code>: The graph to search.<br>
+<code>NodeId</code>: The ID of the node to get.<br>
+</p>
+<p>returns: {ok, NodeRecord} if found, {error, not_found} if the node doesn't exist.</p>
+</div><p>Gets a node by ID.</p>
+
+<h3 class="function"><a name="node_exists-2">node_exists/2</a></h3>
+<div class="spec">
+<p><code>node_exists(Graph::<a href="#type-graph">graph()</a>, NodeId::atom()) -&gt; boolean()</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+<code>NodeId</code>: ID of node to query.<br>
+</p>
+<p>returns: A boolean indicating if the edge exists.</p>
+</div><p>Checks if a node exists.</p>
+
+<h3 class="function"><a name="node_id-1">node_id/1</a></h3>
+<div class="spec">
+<p><code>node_id(Node::<a href="#type-graph_node">graph_node()</a>) -&gt; atom()</code><br></p>
+<p><code>Node</code>: The graph node to get the ID for.<br>
+</p>
+<p>returns: Node ID.</p>
+</div><p>Gets the ID for a node.</p>
+
+<h3 class="function"><a name="node_ids-1">node_ids/1</a></h3>
+<div class="spec">
+<p><code>node_ids(Graph::<a href="#type-graph">graph()</a>) -&gt; [atom()]</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+</p>
+<p>returns: List of all node ids.</p>
+</div><p>Gets list of all node ids.</p>
+
+<h3 class="function"><a name="node_label-1">node_label/1</a></h3>
+<div class="spec">
+<p><code>node_label(Node::<a href="#type-graph_node">graph_node()</a>) -&gt; any()</code><br></p>
+<p><code>Node</code>: The graph node to operate on.<br>
+</p>
+<p>returns: Node label.</p>
+</div><p>Gets the label for a node.</p>
+
+<h3 class="function"><a name="nodes-1">nodes/1</a></h3>
+<div class="spec">
+<p><code>nodes(Graph::<a href="#type-graph">graph()</a>) -&gt; <a href="#type-graph_nodes">graph_nodes()</a></code><br></p>
+<p><code>Graph</code>: Graph to get nodes for.<br>
+</p>
+<p>returns: List of nodes.</p>
+</div><p>Gets nodes for a graph.</p>
+
+<h3 class="function"><a name="num_edges-1">num_edges/1</a></h3>
+<div class="spec">
+<p><code>num_edges(Graph::<a href="#type-graph">graph()</a>) -&gt; integer()</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+</p>
+<p>returns: Number of edges.</p>
+</div><p>Returns the number of edges in a graph.</p>
+
+<h3 class="function"><a name="num_nodes-1">num_nodes/1</a></h3>
+<div class="spec">
+<p><code>num_nodes(Mt_dgraphs::<a href="#type-graph">graph()</a>) -&gt; integer()</code><br></p>
+<p> </p>
+<p>returns: Number of nodes.</p>
+</div><p>Retuns the number of nodes in a graph.</p>
+
+<h3 class="function"><a name="out_degree-2">out_degree/2</a></h3>
+<div class="spec">
+<p><code>out_degree(Graph::<a href="#type-graph">graph()</a>, NodeId::atom()) -&gt; {ok, integer()} | {error, not_found}</code><br></p>
+<p><code>Graph</code>: The graph to query.<br>
+<code>NodeId</code>: The ID of the node coming in.<br>
+</p>
+<p>returns: {ok, EdgeCount} if node exists, {error, not_found} if it doesn't.</p>
+</div><p>Gets the number of edges leaving a node.</p>
+
+<h3 class="function"><a name="path_exists-3">path_exists/3</a></h3>
+<div class="spec">
+<p><code>path_exists(Graph::<a href="#type-graph">graph()</a>, From::atom(), To::atom()) -&gt; boolean()</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+</p>
+<p>returns: A boolean indicating if there is a path from start to end.</p>
+</div><p>Checks if a path exists between two nodes.</p>
+
+<h3 class="function"><a name="path_to-3">path_to/3</a></h3>
+<div class="spec">
+<p><code>path_to(Graph::<a href="#type-graph">graph()</a>, From::atom(), To::atom()) -&gt; {ok, [atom()]} | {error, not_found | none}</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+</p>
+<p>returns: {ok, Path} if a path is found, {error, none} if there is no path, or {error, not_found} if the start or end is invalid.</p>
+</div><p>Retrieves the lowest weighted path between to nodes. Weights =&lt; 0 are treated as if they're of weight ?MIN.</p>
+
+<h3 class="function"><a name="paths-3">paths/3</a></h3>
+<div class="spec">
+<p><code>paths(Graph::<a href="#type-graph">graph()</a>, From::atom(), To::atom()) -&gt; {ok, [[atom()]] | []} | {error, not_found | none}</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+</p>
+<p>returns: {ok, [Path]|[]} if a path is found, or {error, not_found} if the start or end is invalid.</p>
+</div><p>Retrieves a list of all non-looping paths between two nodes.</p>
+
+<h3 class="function"><a name="roots-1">roots/1</a></h3>
+<div class="spec">
+<p><code>roots(Graph::<a href="#type-graph">graph()</a>) -&gt; [atom()]</code><br></p>
+<p><code>Graph</code>: Graph to check.<br>
+</p>
+<p>returns: List of roots.</p>
+</div><p>Gets a list of node ids for nodes that are roots (in degree of 0).</p>
+
+<h3 class="function"><a name="set_edge-3">set_edge/3</a></h3>
+<div class="spec">
+<p><code>set_edge(Graph::<a href="#type-graph">graph()</a>, Start::atom(), End::atom()) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Start</code>: Node ID for the start of the edge.<br>
+<code>End</code>: Node ID for the end of the edge.<br>
+</p>
+<p>returns: A graph with the changes made.</p>
+</div><p>Set an edge's data to the default label and weight. Will insert the edge if not present.</p>
+
+<h3 class="function"><a name="set_edge-4">set_edge/4</a></h3>
+<div class="spec">
+<p><code>set_edge(Graph::<a href="#type-graph">graph()</a>, Start::atom(), End::atom(), Opts::<a href="#type-edge_options">edge_options()</a>) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Start</code>: Node ID for the start of the edge.<br>
+<code>End</code>: Node ID for the end of the edge.<br>
+<code>Opts</code>: A list of edge options. {label, Label} and {weight, Weight} are possible options.<br>
+</p>
+<p>returns: A graph with the changes made.</p>
+</div><p>Set an edge's data to the given label and/or weight. Will insert the edge if not present.</p>
+
+<h3 class="function"><a name="set_edge_label-3">set_edge_label/3</a></h3>
+<div class="spec">
+<p><code>set_edge_label(Graph::<a href="#type-graph">graph()</a>, Edge::{atom(), atom()}, Label::any()) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Edge</code>: The edge to operate on, represented by the tuple {Start, End}.<br>
+<code>Label</code>: The edge label.<br>
+</p>
+<p>returns: A new graph with the change made.</p>
+</div><p>Sets the label for an edge in the graph.</p>
+
+<h3 class="function"><a name="set_edge_weight-3">set_edge_weight/3</a></h3>
+<div class="spec">
+<p><code>set_edge_weight(Graph::<a href="#type-graph">graph()</a>, Edge::{atom(), atom()}, Weight::<a href="#type-edge_weight">edge_weight()</a>) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Edge</code>: The edge to operate on, represented by the tuple {Start, End}.<br>
+<code>Weight</code>: The edge weight.<br>
+</p>
+<p>returns: A new graph with the change made.</p>
+</div><p>Sets the weight for an edge in the graph.</p>
+
+<h3 class="function"><a name="set_edges-2">set_edges/2</a></h3>
+<div class="spec">
+<p><code>set_edges(Graph::<a href="#type-graph">graph()</a>, Edges::<a href="#type-input_edges">input_edges()</a>) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Graph</code>: Graph edit.<br>
+<code>Edges</code>: List of edges to add to the node. Format is either {Start :: atom(), End :: atom()} or {Start :: atom(), End :: atom(), Opts :: edge_options()}.<br>
+</p>
+<p>returns: Updated graph.</p>
+</div><p>Sets multiple edges in a graph. Will overwrite existing edges and add non-existing edges.</p>
+
+<h3 class="function"><a name="set_node-2">set_node/2</a></h3>
+<div class="spec">
+<p><code>set_node(Graph::<a href="#type-graph">graph()</a>, NodeId::atom()) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>NodeId</code>: ID of node to set.<br>
+</p>
+<p>returns: Graph with the changes made.</p>
+</div><p>Sets node data in a graph with a default label. Will insert a node if not present.</p>
+
+<h3 class="function"><a name="set_node-3">set_node/3</a></h3>
+<div class="spec">
+<p><code>set_node(Graph::<a href="#type-graph">graph()</a>, NodeId::atom(), Opts::<a href="#type-node_options">node_options()</a>) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>NodeId</code>: ID of node to set.<br>
+<code>Opts</code>: List of options to use for setting additional node data. Possible options: {label, Label}.<br>
+</p>
+<p>returns: Graph with the changes made.</p>
+</div><p>Sets node data in a graph with the provided options. Will insert a node if not present.</p>
+
+<h3 class="function"><a name="set_node_label-3">set_node_label/3</a></h3>
+<div class="spec">
+<p><code>set_node_label(Graph::<a href="#type-graph">graph()</a>, NodeId::atom(), Label::any()) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>NodeId</code>: The ID of the node to modify.<br>
+<code>Label</code>: The node label.<br>
+</p>
+<p>returns: A new graph with the change made.</p>
+</div><p>Sets the label for a node in the graph.</p>
+
+<h3 class="function"><a name="set_nodes-2">set_nodes/2</a></h3>
+<div class="spec">
+<p><code>set_nodes(Graph::<a href="#type-graph">graph()</a>, Nodes::[<a href="#type-input_node">input_node()</a>]) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Nodes</code>: List of nodes to set. Elements are of either NodeId :: atom() or {NodeId :: atom(), Options :: node_options()}.<br>
+</p>
+<p>returns: The updated graph.</p>
+</div><p>Sets node data for a list of nodes. Will insert any nodes that don't exist and overwite any that do exist.</p>
+
+<h3 class="function"><a name="split_edge-4">split_edge/4</a></h3>
+<div class="spec">
+<p><code>split_edge(Graph::<a href="#type-graph">graph()</a>, Start::atom(), End::atom(), Node::<a href="#type-input_node">input_node()</a>) -&gt; {ok, <a href="#type-graph">graph()</a>} | {error, not_found}</code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+<code>Start</code>: Node ID at start of edge.<br>
+<code>End</code>: Node ID at end of edge.<br>
+<code>Node</code>: Node to use to split edges..<br>
+</p>
+<p>returns: Return.</p>
+</div><p>Splits an edge with either an existing or new node.</p>
+
+<h3 class="function"><a name="topsort-1">topsort/1</a></h3>
+<div class="spec">
+<p><code>topsort(Graph::graph) -&gt; {ok, [atom()]} | {error, cycle_detected}</code><br></p>
+<p><code>Graph</code>: Graph to query.<br>
+</p>
+<p>returns: A list of node ids in topological order.</p>
+</div><p>Performs a topological sort on a graph.</p>
+
+<h3 class="function"><a name="transpose-1">transpose/1</a></h3>
+<div class="spec">
+<p><code>transpose(Graph::<a href="#type-graph">graph()</a>) -&gt; <a href="#type-graph">graph()</a></code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+</p>
+<p>returns: The final graph.</p>
+</div><p>Reverses the direction of all edges in a graph.</p>
+
+<h3 class="function"><a name="type-1">type/1</a></h3>
+<div class="spec">
+<p><code>type(Graph::<a href="#type-graph">graph()</a>) -&gt; <a href="#type-graph_type">graph_type()</a></code><br></p>
+<p><code>Graph</code>: Graph to operate on.<br>
+</p>
+<p>returns: Type of graph (directed or undirected).</p>
+</div><p>Get the graph type.</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc</i></p>
+</body>
+</html>

@@ -1,0 +1,563 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>Module mt_dgraphs_server</title>
+<link rel="stylesheet" type="text/css" href="stylesheet.css" title="EDoc">
+</head>
+<body bgcolor="white">
+<div class="navbar"><a name="#navbar_top"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<hr>
+
+<h1>Module mt_dgraphs_server</h1>
+<ul class="index"><li><a href="#types">Data Types</a></li><li><a href="#index">Function Index</a></li><li><a href="#functions">Function Details</a></li></ul>
+
+<p><b>Behaviours:</b> <a href="gen_server.html"><code>gen_server</code></a>.</p>
+
+<h2><a name="types">Data Types</a></h2>
+
+<h3 class="typedecl"><a name="type-graph_server">graph_server()</a></h3>
+<p><code>graph_server() = pid()</code></p>
+
+
+<h2><a name="index">Function Index</a></h2>
+<table width="100%" border="1" cellspacing="0" cellpadding="2" summary="function index"><tr><td valign="top"><a href="#add_edge-3">add_edge/3</a></td><td>Adds an edge to a graph server.</td></tr>
+<tr><td valign="top"><a href="#add_edge-4">add_edge/4</a></td><td>Adds an edge to the graph if it doesn't already exist.</td></tr>
+<tr><td valign="top"><a href="#add_edges-2">add_edges/2</a></td><td>Addes edges to the graph that don't already exist.</td></tr>
+<tr><td valign="top"><a href="#add_node-2">add_node/2</a></td><td>Adds a new node if it doesn't already exist.</td></tr>
+<tr><td valign="top"><a href="#add_node-3">add_node/3</a></td><td>Adds a new node if it doesn't already exist.</td></tr>
+<tr><td valign="top"><a href="#add_nodes-2">add_nodes/2</a></td><td>Adds new nodes.</td></tr>
+<tr><td valign="top"><a href="#bfs_path_to-3">bfs_path_to/3</a></td><td>Gets the path with the fewest nodes between two paths.</td></tr>
+<tr><td valign="top"><a href="#code_change-3">code_change/3</a></td><td>gen_server:code_change/3 callback.</td></tr>
+<tr><td valign="top"><a href="#delete_edge-3">delete_edge/3</a></td><td>Deletes an edge.</td></tr>
+<tr><td valign="top"><a href="#delete_edges-2">delete_edges/2</a></td><td>Deletes edges.</td></tr>
+<tr><td valign="top"><a href="#delete_node-2">delete_node/2</a></td><td>Deletes a node (if it exists).</td></tr>
+<tr><td valign="top"><a href="#delete_nodes-2">delete_nodes/2</a></td><td>Deletes nodes.</td></tr>
+<tr><td valign="top"><a href="#destroy-1">destroy/1</a></td><td>Shuts down a graph server.</td></tr>
+<tr><td valign="top"><a href="#edge_by-3">edge_by/3</a></td><td>Gets an edge by the start and end node ids.</td></tr>
+<tr><td valign="top"><a href="#edge_exists-3">edge_exists/3</a></td><td>Checks if an edge exists.</td></tr>
+<tr><td valign="top"><a href="#edges-1">edges/1</a></td><td>Gets all edges on a graph server.</td></tr>
+<tr><td valign="top"><a href="#edges_from-2">edges_from/2</a></td><td>Gets all edges extending from a node.</td></tr>
+<tr><td valign="top"><a href="#edges_to-2">edges_to/2</a></td><td>Gets all edges connecting to a node.</td></tr>
+<tr><td valign="top"><a href="#get_edge_label-3">get_edge_label/3</a></td><td>Gets the label tied to an edge.</td></tr>
+<tr><td valign="top"><a href="#get_edge_weight-3">get_edge_weight/3</a></td><td>Gets the weight tied to an edge.</td></tr>
+<tr><td valign="top"><a href="#get_node_label-2">get_node_label/2</a></td><td>Gets the label for a node.</td></tr>
+<tr><td valign="top"><a href="#handle_call-3">handle_call/3</a></td><td>gen_server:handle_call/3 callback.</td></tr>
+<tr><td valign="top"><a href="#handle_cast-2">handle_cast/2</a></td><td>gen_server:handle_cast/2 callback.</td></tr>
+<tr><td valign="top"><a href="#handle_info-2">handle_info/2</a></td><td>gen_server:handle_info/2 callback.</td></tr>
+<tr><td valign="top"><a href="#in_degree-2">in_degree/2</a></td><td>Returns number of edges moving into a node.</td></tr>
+<tr><td valign="top"><a href="#info-1">info/1</a></td><td>Gets graph information in a map from a graph.</td></tr>
+<tr><td valign="top"><a href="#init-1">init/1</a></td><td>gen_server:init/1 callback.</td></tr>
+<tr><td valign="top"><a href="#is_acyclic-1">is_acyclic/1</a></td><td>Checks if a graph is acyclic.</td></tr>
+<tr><td valign="top"><a href="#is_cyclic-1">is_cyclic/1</a></td><td>Checks if a graph is cyclic.</td></tr>
+<tr><td valign="top"><a href="#is_dag-1">is_dag/1</a></td><td>Checks if a graph is a directed acyclic graph.</td></tr>
+<tr><td valign="top"><a href="#is_empty-1">is_empty/1</a></td><td>Checks if a graph is empty.</td></tr>
+<tr><td valign="top"><a href="#is_subgraph-2">is_subgraph/2</a></td><td>Checks if another graph is a subgraph of the root graph.</td></tr>
+<tr><td valign="top"><a href="#is_subgraph-3">is_subgraph/3</a></td><td>Checks if another graph is a subgraph of the root graph.</td></tr>
+<tr><td valign="top"><a href="#is_tree-1">is_tree/1</a></td><td>Checks if a graph is a tree.</td></tr>
+<tr><td valign="top"><a href="#load_graph-2">load_graph/2</a></td><td>Loads graph data from a graph or another graph server.</td></tr>
+<tr><td valign="top"><a href="#new-0">new/0</a></td><td>Equivalent to <a href="mt_dgraphs.html#start_link-0"><code>mt_dgraphs:start_link()</code></a>.
+</td></tr>
+<tr><td valign="top"><a href="#new-1">new/1</a></td><td>Equivalent to <a href="mt_dgraphs.html#start_link-1"><code>mt_dgraphs:start_link(Type)</code></a>.
+</td></tr>
+<tr><td valign="top"><a href="#new-2">new/2</a></td><td>Equivalent to <a href="mt_dgraphs.html#start_link-2"><code>mt_dgraphs:start_link(Type, Edges)</code></a>.
+</td></tr>
+<tr><td valign="top"><a href="#new-3">new/3</a></td><td>Equivalent to <a href="mt_dgraphs.html#start_link-3"><code>mt_dgraphs:start_link(Type, Nodes, Edges)</code></a>.
+</td></tr>
+<tr><td valign="top"><a href="#node_by_id-2">node_by_id/2</a></td><td>Gets a node by id or returns an error if it doesn't exist.</td></tr>
+<tr><td valign="top"><a href="#node_exists-2">node_exists/2</a></td><td>Returns whether a node exists.</td></tr>
+<tr><td valign="top"><a href="#node_ids-1">node_ids/1</a></td><td>Gets all node ids on a graph server.</td></tr>
+<tr><td valign="top"><a href="#nodes-1">nodes/1</a></td><td>Gets all nodes on a graph server.</td></tr>
+<tr><td valign="top"><a href="#num_edges-1">num_edges/1</a></td><td>Gets number of edges in the graph.</td></tr>
+<tr><td valign="top"><a href="#num_nodes-1">num_nodes/1</a></td><td>Gets number of nodes in the graph.</td></tr>
+<tr><td valign="top"><a href="#out_degree-2">out_degree/2</a></td><td>Returns number of edges leaving a node.</td></tr>
+<tr><td valign="top"><a href="#path_exists-3">path_exists/3</a></td><td>Checks if a path exists between two nodes.</td></tr>
+<tr><td valign="top"><a href="#path_to-3">path_to/3</a></td><td>Gets the lowest weighted path between two nodes.</td></tr>
+<tr><td valign="top"><a href="#paths-3">paths/3</a></td><td>Gets a list of all non-looping paths between two nodes.</td></tr>
+<tr><td valign="top"><a href="#raw_graph-1">raw_graph/1</a></td><td>Returns the underlying graph object from a server.</td></tr>
+<tr><td valign="top"><a href="#roots-1">roots/1</a></td><td>Gets the root nodes in a grpah.</td></tr>
+<tr><td valign="top"><a href="#set_edge-3">set_edge/3</a></td><td>Sets an edge to have default label and weight.</td></tr>
+<tr><td valign="top"><a href="#set_edge-4">set_edge/4</a></td><td>Sets an edge.</td></tr>
+<tr><td valign="top"><a href="#set_edge_label-3">set_edge_label/3</a></td><td>Sets an edge's label.</td></tr>
+<tr><td valign="top"><a href="#set_edge_weight-3">set_edge_weight/3</a></td><td>Sets an edge's weight.</td></tr>
+<tr><td valign="top"><a href="#set_edges-2">set_edges/2</a></td><td>Sets multiple edges.</td></tr>
+<tr><td valign="top"><a href="#set_node-2">set_node/2</a></td><td>Sets a node to default data.</td></tr>
+<tr><td valign="top"><a href="#set_node_label-3">set_node_label/3</a></td><td>Sets a node's label.</td></tr>
+<tr><td valign="top"><a href="#set_nodes-2">set_nodes/2</a></td><td>Sets data for serveral nodes.</td></tr>
+<tr><td valign="top"><a href="#split_edge-4">split_edge/4</a></td><td>Splits an edge with a new or existing node.</td></tr>
+<tr><td valign="top"><a href="#start_link-0">start_link/0</a></td><td>Creates and links to a new graph server.</td></tr>
+<tr><td valign="top"><a href="#start_link-1">start_link/1</a></td><td>Creates and links to a new graph server.</td></tr>
+<tr><td valign="top"><a href="#start_link-2">start_link/2</a></td><td>Creates and links to a new graph server.</td></tr>
+<tr><td valign="top"><a href="#start_link-3">start_link/3</a></td><td>Creates and links to a new graph server.</td></tr>
+<tr><td valign="top"><a href="#terminate-2">terminate/2</a></td><td>gen_server:terminate/2 callback.</td></tr>
+<tr><td valign="top"><a href="#topsort-1">topsort/1</a></td><td>Gets the node ids in topological sort order.</td></tr>
+<tr><td valign="top"><a href="#transpose-1">transpose/1</a></td><td>Transposes a graph by inverting the direction of edges.</td></tr>
+<tr><td valign="top"><a href="#type-1">type/1</a></td><td>Gets the type of the graph.</td></tr>
+<tr><td valign="top"><a href="#update_graph-2">update_graph/2</a></td><td>  
+Performs an optomistic update on the graph.</td></tr>
+<tr><td valign="top"><a href="#update_graph-3">update_graph/3</a></td><td>  
+Performs an optomistic update on the graph.</td></tr>
+<tr><td valign="top"><a href="#version-1">version/1</a></td><td>Gets the version number of the graph.</td></tr>
+</table>
+
+<h2><a name="functions">Function Details</a></h2>
+
+<h3 class="function"><a name="add_edge-3">add_edge/3</a></h3>
+<div class="spec">
+<p><code>add_edge(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; ok | already_exists</code><br></p>
+<p> </p>
+</div><p>Adds an edge to a graph server.</p>
+
+<h3 class="function"><a name="add_edge-4">add_edge/4</a></h3>
+<div class="spec">
+<p><code>add_edge(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom(), Opts::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-edge_options">mt_dgraphs:edge_options()</a>) -&gt; ok | already_exists</code><br></p>
+<p> </p>
+</div><p>Adds an edge to the graph if it doesn't already exist.</p>
+
+<h3 class="function"><a name="add_edges-2">add_edges/2</a></h3>
+<div class="spec">
+<p><code>add_edges(Graph::<a href="#type-graph_server">graph_server()</a>, Edges::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-input_edges">mt_dgraphs:input_edges()</a>) -&gt; integer()</code><br></p>
+<p> </p>
+</div><p>Addes edges to the graph that don't already exist. Returns number of added edges</p>
+
+<h3 class="function"><a name="add_node-2">add_node/2</a></h3>
+<div class="spec">
+<p><code>add_node(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom()) -&gt; ok | already_exists</code><br></p>
+<p> </p>
+</div><p>Adds a new node if it doesn't already exist.</p>
+
+<h3 class="function"><a name="add_node-3">add_node/3</a></h3>
+<div class="spec">
+<p><code>add_node(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom(), Opts::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-node_options">mt_dgraphs:node_options()</a>) -&gt; ok | already_exists</code><br></p>
+<p> </p>
+</div><p>Adds a new node if it doesn't already exist.</p>
+
+<h3 class="function"><a name="add_nodes-2">add_nodes/2</a></h3>
+<div class="spec">
+<p><code>add_nodes(Graph::<a href="#type-graph_server">graph_server()</a>, Nodes::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-input_nodes">mt_dgraphs:input_nodes()</a>) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Adds new nodes. Ignores any that already exist.</p>
+
+<h3 class="function"><a name="bfs_path_to-3">bfs_path_to/3</a></h3>
+<div class="spec">
+<p><code>bfs_path_to(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; {ok, [atom()]} | {error, not_found | none}</code><br></p>
+<p> </p>
+</div><p>Gets the path with the fewest nodes between two paths.</p>
+
+<h3 class="function"><a name="code_change-3">code_change/3</a></h3>
+<div class="spec">
+<p><code>code_change(OldVsn, X2, Extra) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server:code_change/3 callback</p>
+
+<h3 class="function"><a name="delete_edge-3">delete_edge/3</a></h3>
+<div class="spec">
+<p><code>delete_edge(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Deletes an edge. Returns whether an edge was deleted</p>
+
+<h3 class="function"><a name="delete_edges-2">delete_edges/2</a></h3>
+<div class="spec">
+<p><code>delete_edges(Graph::<a href="#type-graph_server">graph_server()</a>, Edges::[atom()]) -&gt; integer()</code><br></p>
+<p> </p>
+</div><p>Deletes edges. Returns number deleted</p>
+
+<h3 class="function"><a name="delete_node-2">delete_node/2</a></h3>
+<div class="spec">
+<p><code>delete_node(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom()) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Deletes a node (if it exists).</p>
+
+<h3 class="function"><a name="delete_nodes-2">delete_nodes/2</a></h3>
+<div class="spec">
+<p><code>delete_nodes(Graph::<a href="#type-graph_server">graph_server()</a>, NodeIds::[atom()]) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Deletes nodes.</p>
+
+<h3 class="function"><a name="destroy-1">destroy/1</a></h3>
+<div class="spec">
+<p><code>destroy(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Shuts down a graph server.</p>
+
+<h3 class="function"><a name="edge_by-3">edge_by/3</a></h3>
+<div class="spec">
+<p><code>edge_by(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; {ok, <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_edge">mt_dgraphs:graph_edge()</a>} | {error, not_found}</code><br></p>
+<p> </p>
+</div><p>Gets an edge by the start and end node ids.</p>
+
+<h3 class="function"><a name="edge_exists-3">edge_exists/3</a></h3>
+<div class="spec">
+<p><code>edge_exists(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Checks if an edge exists.</p>
+
+<h3 class="function"><a name="edges-1">edges/1</a></h3>
+<div class="spec">
+<p><code>edges(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_edges">mt_dgraphs:graph_edges()</a></code><br></p>
+<p> </p>
+</div><p>Gets all edges on a graph server.</p>
+
+<h3 class="function"><a name="edges_from-2">edges_from/2</a></h3>
+<div class="spec">
+<p><code>edges_from(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom()) -&gt; {ok, <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_edges">mt_dgraphs:graph_edges()</a>} | {error, not_found}</code><br></p>
+<p> </p>
+</div><p>Gets all edges extending from a node.</p>
+
+<h3 class="function"><a name="edges_to-2">edges_to/2</a></h3>
+<div class="spec">
+<p><code>edges_to(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom()) -&gt; {ok, <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_edges">mt_dgraphs:graph_edges()</a>} | {error, not_found}</code><br></p>
+<p> </p>
+</div><p>Gets all edges connecting to a node.</p>
+
+<h3 class="function"><a name="get_edge_label-3">get_edge_label/3</a></h3>
+<div class="spec">
+<p><code>get_edge_label(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; {ok, any()} | {error, not_found}</code><br></p>
+<p> </p>
+</div><p>Gets the label tied to an edge.</p>
+
+<h3 class="function"><a name="get_edge_weight-3">get_edge_weight/3</a></h3>
+<div class="spec">
+<p><code>get_edge_weight(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; {ok, <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-edge_weight">mt_dgraphs:edge_weight()</a>} | {error, not_found}</code><br></p>
+<p> </p>
+</div><p>Gets the weight tied to an edge.</p>
+
+<h3 class="function"><a name="get_node_label-2">get_node_label/2</a></h3>
+<div class="spec">
+<p><code>get_node_label(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom()) -&gt; {ok, any()} | {error, not_found}</code><br></p>
+<p> </p>
+</div><p>Gets the label for a node. Returns an error if the node doesn't exist.</p>
+
+<h3 class="function"><a name="handle_call-3">handle_call/3</a></h3>
+<div class="spec">
+<p><code>handle_call(Msg, From, X3) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server:handle_call/3 callback</p>
+
+<h3 class="function"><a name="handle_cast-2">handle_cast/2</a></h3>
+<div class="spec">
+<p><code>handle_cast(Msg, X2) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server:handle_cast/2 callback</p>
+
+<h3 class="function"><a name="handle_info-2">handle_info/2</a></h3>
+<div class="spec">
+<p><code>handle_info(Msg, X2) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server:handle_info/2 callback</p>
+
+<h3 class="function"><a name="in_degree-2">in_degree/2</a></h3>
+<div class="spec">
+<p><code>in_degree(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom()) -&gt; integer()</code><br></p>
+<p> </p>
+</div><p>Returns number of edges moving into a node.</p>
+
+<h3 class="function"><a name="info-1">info/1</a></h3>
+<div class="spec">
+<p><code>info(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; #{}</code><br></p>
+<p> </p>
+</div><p>Gets graph information in a map from a graph.</p>
+
+<h3 class="function"><a name="init-1">init/1</a></h3>
+<div class="spec">
+<p><code>init(X1) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server:init/1 callback</p>
+
+<h3 class="function"><a name="is_acyclic-1">is_acyclic/1</a></h3>
+<div class="spec">
+<p><code>is_acyclic(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Checks if a graph is acyclic.</p>
+
+<h3 class="function"><a name="is_cyclic-1">is_cyclic/1</a></h3>
+<div class="spec">
+<p><code>is_cyclic(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Checks if a graph is cyclic.</p>
+
+<h3 class="function"><a name="is_dag-1">is_dag/1</a></h3>
+<div class="spec">
+<p><code>is_dag(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Checks if a graph is a directed acyclic graph.</p>
+
+<h3 class="function"><a name="is_empty-1">is_empty/1</a></h3>
+<div class="spec">
+<p><code>is_empty(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Checks if a graph is empty.</p>
+
+<h3 class="function"><a name="is_subgraph-2">is_subgraph/2</a></h3>
+<div class="spec">
+<p><code>is_subgraph(RootGraph::<a href="#type-graph_server">graph_server()</a>, SubGraph::<a href="#type-graph_server">graph_server()</a> | <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph">mt_dgraphs:graph()</a>) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Checks if another graph is a subgraph of the root graph.</p>
+
+<h3 class="function"><a name="is_subgraph-3">is_subgraph/3</a></h3>
+<div class="spec">
+<p><code>is_subgraph(RootGraph::<a href="#type-graph_server">graph_server()</a>, SubGraph::<a href="#type-graph_server">graph_server()</a> | <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph">mt_dgraphs:graph()</a>, Opts::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-subgraph_opts">mt_dgraphs:subgraph_opts()</a>) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Checks if another graph is a subgraph of the root graph.</p>
+
+<h3 class="function"><a name="is_tree-1">is_tree/1</a></h3>
+<div class="spec">
+<p><code>is_tree(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Checks if a graph is a tree.</p>
+
+<h3 class="function"><a name="load_graph-2">load_graph/2</a></h3>
+<div class="spec">
+<p><code>load_graph(Graph::<a href="#type-graph_server">graph_server()</a>, Source::<a href="#type-graph_server">graph_server()</a> | <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph">mt_dgraphs:graph()</a>) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Loads graph data from a graph or another graph server. Overwrites all data in memory.</p>
+
+<h3 class="function"><a name="new-0">new/0</a></h3>
+<div class="spec">
+<p><code>new() -&gt; {ok, <a href="#type-graph_server">graph_server()</a>} | ignore | {error, term()}</code><br></p>
+<p> </p>
+</div><p>Equivalent to <a href="mt_dgraphs.html#start_link-0"><code>mt_dgraphs:start_link()</code></a>.</p>
+
+
+<h3 class="function"><a name="new-1">new/1</a></h3>
+<div class="spec">
+<p><code>new(Type::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_type">mt_dgraphs:graph_type()</a> | <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_edges">mt_dgraphs:graph_edges()</a>) -&gt; {ok, <a href="#type-graph_server">graph_server()</a>} | ignore | {error, term()}</code><br></p>
+<p> </p>
+</div><p>Equivalent to <a href="mt_dgraphs.html#start_link-1"><code>mt_dgraphs:start_link(Type)</code></a>.</p>
+
+
+<h3 class="function"><a name="new-2">new/2</a></h3>
+<div class="spec">
+<p><code>new(Type::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_type">mt_dgraphs:graph_type()</a> | <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_nodes">mt_dgraphs:graph_nodes()</a>, Edges::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_edges">mt_dgraphs:graph_edges()</a>) -&gt; {ok, <a href="#type-graph_server">graph_server()</a>} | ignore | {error, term()}</code><br></p>
+<p> </p>
+</div><p>Equivalent to <a href="mt_dgraphs.html#start_link-2"><code>mt_dgraphs:start_link(Type, Edges)</code></a>.</p>
+
+
+<h3 class="function"><a name="new-3">new/3</a></h3>
+<div class="spec">
+<p><code>new(Type::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_type">mt_dgraphs:graph_type()</a>, Nodes::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_nodes">mt_dgraphs:graph_nodes()</a>, Edges::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_edges">mt_dgraphs:graph_edges()</a>) -&gt; {ok, <a href="#type-graph_server">graph_server()</a>} | ignore | {error, term()}</code><br></p>
+<p> </p>
+</div><p>Equivalent to <a href="mt_dgraphs.html#start_link-3"><code>mt_dgraphs:start_link(Type, Nodes, Edges)</code></a>.</p>
+
+
+<h3 class="function"><a name="node_by_id-2">node_by_id/2</a></h3>
+<div class="spec">
+<p><code>node_by_id(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom()) -&gt; {ok, <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_node">mt_dgraphs:graph_node()</a>} | {error, not_found}</code><br></p>
+<p> </p>
+</div><p>Gets a node by id or returns an error if it doesn't exist.</p>
+
+<h3 class="function"><a name="node_exists-2">node_exists/2</a></h3>
+<div class="spec">
+<p><code>node_exists(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom()) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Returns whether a node exists.</p>
+
+<h3 class="function"><a name="node_ids-1">node_ids/1</a></h3>
+<div class="spec">
+<p><code>node_ids(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; [atom()] | []</code><br></p>
+<p> </p>
+</div><p>Gets all node ids on a graph server.</p>
+
+<h3 class="function"><a name="nodes-1">nodes/1</a></h3>
+<div class="spec">
+<p><code>nodes(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_nodes">mt_dgraphs:graph_nodes()</a></code><br></p>
+<p> </p>
+</div><p>Gets all nodes on a graph server.</p>
+
+<h3 class="function"><a name="num_edges-1">num_edges/1</a></h3>
+<div class="spec">
+<p><code>num_edges(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; integer()</code><br></p>
+<p> </p>
+</div><p>Gets number of edges in the graph.</p>
+
+<h3 class="function"><a name="num_nodes-1">num_nodes/1</a></h3>
+<div class="spec">
+<p><code>num_nodes(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; integer()</code><br></p>
+<p> </p>
+</div><p>Gets number of nodes in the graph.</p>
+
+<h3 class="function"><a name="out_degree-2">out_degree/2</a></h3>
+<div class="spec">
+<p><code>out_degree(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom()) -&gt; integer()</code><br></p>
+<p> </p>
+</div><p>Returns number of edges leaving a node.</p>
+
+<h3 class="function"><a name="path_exists-3">path_exists/3</a></h3>
+<div class="spec">
+<p><code>path_exists(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; boolean()</code><br></p>
+<p> </p>
+</div><p>Checks if a path exists between two nodes.</p>
+
+<h3 class="function"><a name="path_to-3">path_to/3</a></h3>
+<div class="spec">
+<p><code>path_to(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; {ok, [atom()]} | {error, not_found | none}</code><br></p>
+<p> </p>
+</div><p>Gets the lowest weighted path between two nodes.</p>
+
+<h3 class="function"><a name="paths-3">paths/3</a></h3>
+<div class="spec">
+<p><code>paths(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; {ok, [] | [[atom()]]} | {error, not_found | none}</code><br></p>
+<p> </p>
+</div><p>Gets a list of all non-looping paths between two nodes.</p>
+
+<h3 class="function"><a name="raw_graph-1">raw_graph/1</a></h3>
+<div class="spec">
+<p><code>raw_graph(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph">mt_dgraphs:graph()</a></code><br></p>
+<p> </p>
+</div><p>Returns the underlying graph object from a server.</p>
+
+<h3 class="function"><a name="roots-1">roots/1</a></h3>
+<div class="spec">
+<p><code>roots(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; [] | [atom()]</code><br></p>
+<p> </p>
+</div><p>Gets the root nodes in a grpah.</p>
+
+<h3 class="function"><a name="set_edge-3">set_edge/3</a></h3>
+<div class="spec">
+<p><code>set_edge(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom()) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Sets an edge to have default label and weight. Inserts edge if missing.</p>
+
+<h3 class="function"><a name="set_edge-4">set_edge/4</a></h3>
+<div class="spec">
+<p><code>set_edge(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom(), Opts::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-edge_options">mt_dgraphs:edge_options()</a>) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Sets an edge. Inserts if missing</p>
+
+<h3 class="function"><a name="set_edge_label-3">set_edge_label/3</a></h3>
+<div class="spec">
+<p><code>set_edge_label(Graph::<a href="#type-graph_server">graph_server()</a>, Edge::{atom(), atom()}, Label::any()) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Sets an edge's label. Will create an edge if missing.</p>
+
+<h3 class="function"><a name="set_edge_weight-3">set_edge_weight/3</a></h3>
+<div class="spec">
+<p><code>set_edge_weight(Graph::<a href="#type-graph_server">graph_server()</a>, Edge::{atom(), atom()}, Weight::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-edge_weight">mt_dgraphs:edge_weight()</a>) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Sets an edge's weight. Will create an edge if missing.</p>
+
+<h3 class="function"><a name="set_edges-2">set_edges/2</a></h3>
+<div class="spec">
+<p><code>set_edges(Graph::<a href="#type-graph_server">graph_server()</a>, Edges::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-input_edges">mt_dgraphs:input_edges()</a>) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Sets multiple edges. Will insert any that are missing.</p>
+
+<h3 class="function"><a name="set_node-2">set_node/2</a></h3>
+<div class="spec">
+<p><code>set_node(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom()) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Sets a node to default data. Adds it if it doesn't exist.</p>
+
+<h3 class="function"><a name="set_node_label-3">set_node_label/3</a></h3>
+<div class="spec">
+<p><code>set_node_label(Graph::<a href="#type-graph_server">graph_server()</a>, NodeId::atom(), Label::any()) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Sets a node's label. Adds a node if it doesn't exist.</p>
+
+<h3 class="function"><a name="set_nodes-2">set_nodes/2</a></h3>
+<div class="spec">
+<p><code>set_nodes(Graph::<a href="#type-graph_server">graph_server()</a>, Nodes::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-input_nodes">mt_dgraphs:input_nodes()</a>) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Sets data for serveral nodes. Adds any that don't exist.</p>
+
+<h3 class="function"><a name="split_edge-4">split_edge/4</a></h3>
+<div class="spec">
+<p><code>split_edge(Graph::<a href="#type-graph_server">graph_server()</a>, Start::atom(), End::atom(), Node::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-input_node">mt_dgraphs:input_node()</a>) -&gt; ok | {error, not_found}</code><br></p>
+<p> </p>
+</div><p><p>Splits an edge with a new or existing node.</p>
+ 
+  If the node is only a node id, then it will try to reuse an existing node.
+  If the ndoe is {Node, Opts}, then it will overwrite an existing node</p>
+
+<h3 class="function"><a name="start_link-0">start_link/0</a></h3>
+<div class="spec">
+<p><code>start_link() -&gt; {ok, <a href="#type-graph_server">graph_server()</a>} | ignore | {error, term()}</code><br></p>
+<p> </p>
+</div><p>Creates and links to a new graph server.</p>
+
+<h3 class="function"><a name="start_link-1">start_link/1</a></h3>
+<div class="spec">
+<p><code>start_link(Type::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_type">mt_dgraphs:graph_type()</a> | <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_edges">mt_dgraphs:graph_edges()</a>) -&gt; {ok, <a href="#type-graph_server">graph_server()</a>} | ignore | {error, term()}</code><br></p>
+<p> </p>
+</div><p>Creates and links to a new graph server.</p>
+
+<h3 class="function"><a name="start_link-2">start_link/2</a></h3>
+<div class="spec">
+<p><code>start_link(Type::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_type">mt_dgraphs:graph_type()</a> | <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_nodes">mt_dgraphs:graph_nodes()</a>, Edges::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_edges">mt_dgraphs:graph_edges()</a>) -&gt; {ok, <a href="#type-graph_server">graph_server()</a>} | ignore | {error, term()}</code><br></p>
+<p> </p>
+</div><p>Creates and links to a new graph server.</p>
+
+<h3 class="function"><a name="start_link-3">start_link/3</a></h3>
+<div class="spec">
+<p><code>start_link(Type::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_type">mt_dgraphs:graph_type()</a>, Nodes::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_nodes">mt_dgraphs:graph_nodes()</a>, Edges::<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_edges">mt_dgraphs:graph_edges()</a>) -&gt; {ok, <a href="#type-graph_server">graph_server()</a>} | ignore | {error, term()}</code><br></p>
+<p> </p>
+</div><p>Creates and links to a new graph server.</p>
+
+<h3 class="function"><a name="terminate-2">terminate/2</a></h3>
+<div class="spec">
+<p><code>terminate(X1, X2) -&gt; any()</code></p>
+<p> </p>
+</div><p>gen_server:terminate/2 callback</p>
+
+<h3 class="function"><a name="topsort-1">topsort/1</a></h3>
+<div class="spec">
+<p><code>topsort(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; [] | [atom()]</code><br></p>
+<p> </p>
+</div><p>Gets the node ids in topological sort order.</p>
+
+<h3 class="function"><a name="transpose-1">transpose/1</a></h3>
+<div class="spec">
+<p><code>transpose(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; ok</code><br></p>
+<p> </p>
+</div><p>Transposes a graph by inverting the direction of edges.</p>
+
+<h3 class="function"><a name="type-1">type/1</a></h3>
+<div class="spec">
+<p><code>type(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph_type">mt_dgraphs:graph_type()</a></code><br></p>
+<p> </p>
+</div><p>Gets the type of the graph.</p>
+
+<h3 class="function"><a name="update_graph-2">update_graph/2</a></h3>
+<div class="spec">
+<p><code>update_graph(Graph::<a href="#type-graph_server">graph_server()</a>, Fun::fun((<a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph">mt_dgraphs:graph()</a>) -&gt; <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph">mt_dgraphs:graph()</a> | {ok, <a href="/Users/matttolman/dev/erlang/mt_dgraphs/doc/mt_dgraphs.html#type-graph">mt_dgraphs:graph()</a>} | {error, any()})) -&gt; ok | {error, exceeded_retries}</code><br></p>
+<p> </p>
+</div><p><p>  
+Performs an optomistic update on the graph.</p>
+ 
+  <p>Optimistic updates will grab the current graph state, perform a mutation on it,  
+and then save the output only if the graph state did not change. If the graph state  
+did change, then it will grab the new state and retry applying the transformation  
+up to N times.</p>
+ 
+  This allows performing complex transformation changes on a graph without blocking reads.
+  Do notes that this can cause failures or high CPU usage if there are lots of competing optimistic updates.</p>
+
+<h3 class="function"><a name="update_graph-3">update_graph/3</a></h3>
+<div class="spec">
+<p><code>update_graph(Graph, Fun, Retries) -&gt; any()</code></p>
+<p> </p>
+</div><p><p>  
+Performs an optomistic update on the graph.</p>
+ 
+  <p>Optimistic updates will grab the current graph state, perform a mutation on it,  
+and then save the output only if the graph state did not change. If the graph state  
+did change, then it will grab the new state and retry applying the transformation  
+up to N times.</p>
+ 
+  This allows performing complex transformation changes on a graph without blocking reads.
+  Do notes that this can cause failures or high CPU usage if there are lots of competing optimistic updates.</p>
+
+<h3 class="function"><a name="version-1">version/1</a></h3>
+<div class="spec">
+<p><code>version(Graph::<a href="#type-graph_server">graph_server()</a>) -&gt; integer()</code><br></p>
+<p> </p>
+</div><p><p>Gets the version number of the graph.</p>
+ 
+  Version numbers indicate how many changes have been made to a graph server.
+  They can be used for optimistic locking</p>
+<hr>
+
+<div class="navbar"><a name="#navbar_bottom"></a><table width="100%" border="0" cellspacing="0" cellpadding="2" summary="navigation bar"><tr><td><a href="overview-summary.html" target="overviewFrame">Overview</a></td><td><a href="http://www.erlang.org/"><img src="erlang.png" align="right" border="0" alt="erlang logo"></a></td></tr></table></div>
+<p><i>Generated by EDoc</i></p>
+</body>
+</html>

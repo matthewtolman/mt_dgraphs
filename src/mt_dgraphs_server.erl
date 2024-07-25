@@ -11,7 +11,7 @@
          info/1, is_empty/1, is_cyclic/1, is_acyclic/1, is_dag/1, is_tree/1, num_edges/1,
          num_nodes/1, topsort/1, transpose/1, type/1, is_subgraph/3, is_subgraph/2, raw_graph/1,
          destroy/1, add_edges/2, add_nodes/2, set_edges/2, set_nodes/2, load_graph/2, version/1,
-         update_graph/3, update_graph/2]).
+         update_graph/3, update_graph/2, start_link/0, start_link/1, start_link/2, start_link/3]).
 -export([init/1, terminate/2, handle_call/3, handle_cast/2, handle_info/2,
          code_change/3]).
 
@@ -29,9 +29,9 @@
 %% @end
 %%
 %% ----------------------------------
--spec new() -> {ok, graph_server()} | ignore | {error, term()}.
-new() ->
-    new(directed, [], []).
+-spec start_link() -> {ok, graph_server()} | ignore | {error, term()}.
+start_link() ->
+    start_link(directed, [], []).
 
 %% ----------------------------------
 %%
@@ -39,6 +39,32 @@ new() ->
 %% @end
 %%
 %% ----------------------------------
+-spec start_link(mt_dgraphs:graph_type() | mt_dgraphs:graph_edges()) ->
+             {ok, graph_server()} | ignore | {error, term()}.
+start_link(Type) when is_atom(Type) ->
+    start_link(Type, [], []);
+start_link(Edges) when is_list(Edges) ->
+    start_link(directed, [], Edges).
+
+%% ----------------------------------
+%%
+%% @doc Creates and links to a new graph server.
+%% @end
+%%
+%% ----------------------------------
+-spec start_link(mt_dgraphs:graph_type() | mt_dgraphs:graph_nodes(), mt_dgraphs:graph_edges()) ->
+             {ok, graph_server()} | ignore | {error, term()}.
+start_link(Type, Edges) when is_atom(Type) ->
+    start_link(Type, [], Edges);
+start_link(Nodes, Edges) ->
+    start_link(directed, Nodes, Edges).
+
+%% @equiv mt_dgraphs:start_link()
+-spec new() -> {ok, graph_server()} | ignore | {error, term()}.
+new() ->
+    new(directed, [], []).
+
+%% @equiv mt_dgraphs:start_link(Type)
 -spec new(mt_dgraphs:graph_type() | mt_dgraphs:graph_edges()) ->
              {ok, graph_server()} | ignore | {error, term()}.
 new(Type) when is_atom(Type) ->
@@ -46,12 +72,7 @@ new(Type) when is_atom(Type) ->
 new(Edges) when is_list(Edges) ->
     new(directed, [], Edges).
 
-%% ----------------------------------
-%%
-%% @doc Creates and links to a new graph server.
-%% @end
-%%
-%% ----------------------------------
+%% @equiv mt_dgraphs:start_link(Type, Edges)
 -spec new(mt_dgraphs:graph_type() | mt_dgraphs:graph_nodes(), mt_dgraphs:graph_edges()) ->
              {ok, graph_server()} | ignore | {error, term()}.
 new(Type, Edges) when is_atom(Type) ->
@@ -59,15 +80,21 @@ new(Type, Edges) when is_atom(Type) ->
 new(Nodes, Edges) ->
     new(directed, Nodes, Edges).
 
+%% @equiv mt_dgraphs:start_link(Type, Nodes, Edges)
+-spec new(mt_dgraphs:graph_type(), mt_dgraphs:graph_nodes(), mt_dgraphs:graph_edges()) ->
+             {ok, graph_server()} | ignore | {error, term()}.
+new(Type, Nodes, Edges) ->
+    start_link(Type, Nodes, Edges).
+
 %% ----------------------------------
 %%
 %% @doc Creates and links to a new graph server.
 %% @end
 %%
 %% ----------------------------------
--spec new(mt_dgraphs:graph_type(), mt_dgraphs:graph_nodes(), mt_dgraphs:graph_edges()) ->
+-spec start_link(mt_dgraphs:graph_type(), mt_dgraphs:graph_nodes(), mt_dgraphs:graph_edges()) ->
              {ok, graph_server()} | ignore | {error, term()}.
-new(Type, Nodes, Edges) ->
+start_link(Type, Nodes, Edges) ->
     gen_server:start_link(?MODULE, [Type, Nodes, Edges], []).
 
 %% ----------------------------------
@@ -593,6 +620,12 @@ type(Graph) ->
 is_subgraph(RootGraph, SubGraph) ->
     is_subgraph(RootGraph, SubGraph, []).
 
+%% ----------------------------------
+%%
+%% @doc Checks if another graph is a subgraph of the root graph.
+%% @end
+%%
+%% ----------------------------------
 -spec is_subgraph(graph_server(),
                   graph_server() | mt_dgraphs:graph(),
                   mt_dgraphs:subgraph_opts()) ->
@@ -637,6 +670,21 @@ version(Graph) ->
 state(Graph) ->
     gen_server:call(Graph, state).
 
+%% ----------------------------------
+%%
+%% @doc 
+%% Performs an optimistic update on the graph.
+%%
+%% Optimistic updates will grab the current graph state, perform a mutation on it,
+%% and then save the output only if the graph state did not change. If the graph state
+%% did change, then it will grab the new state and retry applying the transformation
+%% up to N times.
+%%
+%% This allows performing complex transformation changes on a graph without blocking reads.
+%% Do notes that this can cause failures or high CPU usage if there are lots of competing optimistic updates.
+%% @end
+%%
+%% ----------------------------------
 -spec update_graph(graph_server(),
                    fun((mt_dgraphs:graph()) ->
                            mt_dgraphs:graph() | {ok, mt_dgraphs:graph()} | {error, any()})) ->
@@ -644,8 +692,21 @@ state(Graph) ->
 update_graph(Graph, Fun) ->
     update_graph(Graph, Fun, 5).
 
-% -spec update_graph(graph_server(), fun((mt_dgraphs:graph()) -> mt_dgraphs:graph() | {ok, mt_dgraphs:graph()} | {error, any()}), integer()) ->
-%                       ok | {error, exceeded_retries}.
+%% ----------------------------------
+%%
+%% @doc 
+%% Performs an optimistic update on the graph.
+%%
+%% Optimistic updates will grab the current graph state, perform a mutation on it,
+%% and then save the output only if the graph state did not change. If the graph state
+%% did change, then it will grab the new state and retry applying the transformation
+%% up to N times.
+%%
+%% This allows performing complex transformation changes on a graph without blocking reads.
+%% Do notes that this can cause failures or high CPU usage if there are lots of competing optimistic updates.
+%% @end
+%%
+%% ----------------------------------
 update_graph(Graph, Fun, Retries) when Retries > 0 ->
     {V, R} = state(Graph),
     {Status, NewGraph} =
@@ -686,12 +747,15 @@ destroy(Graph) ->
 
 %% Gen Server
 
+%% @doc gen_server:init/1 callback
 init([Type, Nodes, Edges]) ->
     {ok, {0, mt_dgraphs:new(Type, Nodes, Edges)}}.
 
+%% @doc gen_server:terminate/2 callback
 terminate(_, _) ->
     ok.
 
+%% @doc gen_server:handle_call/3 callback
 handle_call(nodes, _From, {Version, Graph}) ->
     {reply, mt_dgraphs:nodes(Graph), {Version, Graph}};
 handle_call(node_ids, _From, {Version, Graph}) ->
@@ -889,13 +953,16 @@ handle_call({optimistic_update, OldVersion, NewGraph = #mt_dgraphs{}},
 handle_call(_Msg, _From, {Version, Graph}) ->
     {reply, {error, bad_msg}, {Version, Graph}}.
 
+%% @doc gen_server:handle_cast/2 callback
 handle_cast(stop, {Version, Graph}) ->
     {stop, normal, {Version, Graph}};
 handle_cast(_Msg, {Version, Graph}) ->
     {noreply, {Version, Graph}}.
 
+%% @doc gen_server:handle_info/2 callback
 handle_info(_Msg, {Version, Graph}) ->
     {noreply, {Version, Graph}}.
 
+%% @doc gen_server:code_change/3 callback
 code_change(_OldVsn, {Version, Graph}, _Extra) ->
     {ok, {Version + 1, Graph}}.
